@@ -4,22 +4,40 @@
 def average_per_student(records: list[dict]) -> dict[str, float]:
     """Map each student name to their average score, rounded to 2 decimals."""
     # TODO: implement
-    pass
+    student_scores: dict[str, list[int]] = {}
+    
+    for record in records:
+        name = record["name"]
+        score = record["score"]
+        
+        if name not in student_scores:
+            student_scores[name] = []
+            
+        student_scores[name].append(score)
+        
+    return {
+        name: round(sum(scores) / len(scores), 2)
+        for name, scores in student_scores.items()
+    }
 
 
 def subjects_offered(records: list[dict]) -> set[str]:
     """Return the set of unique subjects across all records."""
     # TODO: implement
-    pass
+    return {record["subject"] for record in records}
 
 
 def top_scorer(records: list[dict]) -> tuple[str, float]:
     """Return (name, average) for the student with the highest average."""
     # TODO: implement
-    pass
+    averages = average_per_student(records)
+    if not averages:
+        return ("", 0.0)
+    return max(averages.items(), key=lambda item: item[1])
 
 
 def passing_students(records: list[dict], threshold: float = 60.0) -> list[str]:
     """Return names whose average >= threshold, sorted alphabetically."""
     # TODO: implement
-    pass
+    averages = average_per_student(records)
+    return [name for name, avg in averages.items() if avg >= threshold]
